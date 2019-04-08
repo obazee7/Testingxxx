@@ -1,0 +1,35 @@
+
+                SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
+                csb.DataSource = "UKHQNASMO";
+                csb.InitialCatalog = "nasmo_24_copssg_Copernicus";
+                csb.IntegratedSecurity = true;
+                string connString = csb.ToString();
+
+              //Be sure to replace<YourTable> with the actual name of the Table
+              string queryString = "Select top 1 NationalInsuranceNumber FROM dbo.Cli_PersonDetails where DateofBirth ='1953-03-03'";
+
+                using (SqlConnection connection = new SqlConnection(connString))
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = queryString;
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+
+                            string DB_NINO = reader.GetValue(0).ToString();
+
+                            Assert.AreEqual("WE187294D", DB_NINO);
+
+
+                            
+
+                        }
+
+                    
+
+                       connection.Close();
